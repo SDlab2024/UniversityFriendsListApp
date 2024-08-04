@@ -1,4 +1,8 @@
-# highschoolfriendslistapp
+# universityfriendslistapp
+
+## 画面
+<img src="https://github.com/user-attachments/assets/e7a3798d-988d-488a-92f8-74055ce6738f" width="320">
+
 
 A new Flutter project.
 
