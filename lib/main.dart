@@ -8,12 +8,13 @@ void main() {
 
 class Friend {
   String name;
-  String university;
-  String faculty;
-  String year;
-  String email;
+  String grade;
+  String meetPlace; // 今回変更：知り合った場所を表すプロパティを追加
+  String instagramId; // 今回変更：インスタIDを表すプロパティを追加
+  String club; // 今回変更：部活を表すプロパティを追加
+  String hobby; // 今回変更：趣味を表すプロパティを追加
 
-  Friend(this.name, this.university, this.faculty, this.year, this.email);
+  Friend(this.name, this.grade, this.meetPlace, this.instagramId, this.club, this.hobby); // 今回変更：コンストラクタを更新
 }
 
 class FriendListApp extends StatelessWidget {
@@ -41,7 +42,7 @@ class _FriendListPageState extends State<FriendListPage> {
   @override
   void initState() {
     super.initState();
-    _loadFriends(); // 追加: アプリ起動時に友達リストを読み込む
+    _loadFriends(); //アプリ起動時に友達リストを読み込む
   }
 
   void _addFriend() {
@@ -49,10 +50,11 @@ class _FriendListPageState extends State<FriendListPage> {
       context: context,
       builder: (BuildContext context) {
         String name = '';
-        String university = '';
-        String faculty = '';
-        String year = '';
-        String email = '';
+        String grade = ''; // 今回変更：学年用の変数
+        String meetPlace = ''; // 今回変更：知り合った場所用の変数
+        String instagramId = ''; // 今回変更：インスタID用の変数
+        String club = ''; // 今回変更：部活用の変数
+        String hobby = ''; // 今回変更：趣味用の変数
 
         return AlertDialog(
           title: Text('友達を追加'),
@@ -60,18 +62,19 @@ class _FriendListPageState extends State<FriendListPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _buildTextField('名前', (value) => name = value),
-              _buildTextField('大学名', (value) => university = value),
-              _buildTextField('学部', (value) => faculty = value),
-              _buildTextField('学年', (value) => year = value),
-              _buildTextField('メールアドレス', (value) => email = value),
+              _buildTextField('学年', (value) => grade = value), // 今回変更：学年入力フィールド
+              _buildTextField('知り合った場所', (value) => meetPlace = value), // 今回変更：知り合った場所入力フィールド
+              _buildTextField('インスタID', (value) => instagramId = value), // 今回変更：インスタID入力フィールド
+              _buildTextField('部活', (value) => club = value), // 今回変更：部活入力フィールド
+              _buildTextField('趣味', (value) => hobby = value), // 今回変更：趣味入力フィールド
             ],
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 setState(() {
-                  friends.add(Friend(name, university, faculty, year, email));
-                  _saveFriends(); //追加：友達を追加した後に保存
+                  friends.add(Friend(name, grade, meetPlace, instagramId, club, hobby)); // 今回変更：Friendオブジェクト作成時に新しい情報を使用
+                  _saveFriends(); //友達を追加した後に保存
                 });
                 Navigator.of(context).pop();
               },
@@ -94,10 +97,11 @@ class _FriendListPageState extends State<FriendListPage> {
       context: context,
       builder: (BuildContext context) {
         String name = friends[index].name;
-        String university = friends[index].university;
-        String faculty = friends[index].faculty;
-        String year = friends[index].year;
-        String email = friends[index].email;
+        String grade = friends[index].grade; // 今回変更：学年の変数
+        String meetPlace = friends[index].meetPlace; // 今回変更：知り合った場所の変数
+        String instagramId = friends[index].instagramId; // 今回変更：インスタIDの変数
+        String club = friends[index].club; // 今回変更：部活の変数
+        String hobby = friends[index].hobby; // 今回変更：趣味の変数
 
         return AlertDialog(
           title: Text('友達を編集'),
@@ -105,18 +109,19 @@ class _FriendListPageState extends State<FriendListPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               _buildTextField('名前', (value) => name = value, initialValue: name),
-              _buildTextField('大学名', (value) => university = value, initialValue: university),
-              _buildTextField('学部', (value) => faculty = value, initialValue: faculty),
-              _buildTextField('学年', (value) => year = value, initialValue: year),
-              _buildTextField('メールアドレス', (value) => email = value, initialValue: email),
+              _buildTextField('学年', (value) => grade = value, initialValue: grade), // 今回変更：学年入力フィールド
+              _buildTextField('知り合った場所', (value) => meetPlace = value, initialValue: meetPlace), // 今回変更：知り合った場所入力フィールド
+              _buildTextField('インスタID', (value) => instagramId = value, initialValue: instagramId), // 今回変更：インスタID入力フィールド
+              _buildTextField('部活', (value) => club = value, initialValue: club), // 今回変更：部活入力フィールド
+              _buildTextField('趣味', (value) => hobby = value, initialValue: hobby), // 今回変更：趣味入力フィールド
             ],
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 setState(() {
-                  friends[index] = Friend(name, university, faculty, year, email);
-                  _saveFriends(); //追加: 友達を編集した後に保存
+                  friends[index] = Friend(name, grade, meetPlace, instagramId, club, hobby); // 今回変更：Friendオブジェクトの更新
+                  _saveFriends(); //友達を編集した後に保存
                 });
                 Navigator.of(context).pop();
               },
@@ -137,7 +142,7 @@ class _FriendListPageState extends State<FriendListPage> {
   void _deleteFriend(int index) {
     setState(() {
       friends.removeAt(index);
-      _saveFriends(); //追加: 友達を削除した後に保存
+      _saveFriends(); //友達を削除した後に保存
     });
   }
 
@@ -152,20 +157,21 @@ class _FriendListPageState extends State<FriendListPage> {
     );
   }
 
-  // 追加: 友達リストを保存するメソッド
+  //友達リストを保存するメソッド
   void _saveFriends() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> friendList = friends.map((friend) => json.encode({
       'name': friend.name,
-      'university': friend.university,
-      'faculty': friend.faculty,
-      'year': friend.year,
-      'email': friend.email,
+      'grade': friend.grade, // 今回変更：学年の保存
+      'meetPlace': friend.meetPlace, // 今回変更：知り合った場所の保存
+      'instagramId': friend.instagramId, // 今回変更：インスタIDの保存
+      'club': friend.club, // 今回変更：部活の保存
+      'hobby': friend.hobby, // 今回変更：趣味の保存
     })).toList();
     await prefs.setStringList('friendList', friendList);
   }
 
-  // 追加: 友達リストを読み込むメソッド
+  //友達リストを読み込むメソッド
   void _loadFriends() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? friendList = prefs.getStringList('friendList');
@@ -175,10 +181,11 @@ class _FriendListPageState extends State<FriendListPage> {
           Map<String, dynamic> friendData = json.decode(item);
           return Friend(
             friendData['name'],
-            friendData['university'],
-            friendData['faculty'],
-            friendData['year'],
-            friendData['email'],
+            friendData['grade'], // 今回変更：学年の読み込み
+            friendData['meetPlace'], // 今回変更：知り合った場所の読み込み
+            friendData['instagramId'], // 今回変更：インスタIDの読み込み
+            friendData['club'], // 今回変更：部活の読み込み
+            friendData['hobby'], // 今回変更：趣味の読み込み
           );
         }).toList();
       });
