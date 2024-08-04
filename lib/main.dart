@@ -21,7 +21,7 @@ class FriendListApp extends StatelessWidget {
       home: FriendListPage(),
       theme: ThemeData(
         primaryColor: Colors.white,
-        accentColor: Colors.blue,
+        hintColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
     );
