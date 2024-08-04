@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // 追加
+import 'dart:convert'; // 追加
 
 void main() {
   runApp(FriendListApp());
@@ -36,6 +38,12 @@ class FriendListPage extends StatefulWidget {
 class _FriendListPageState extends State<FriendListPage> {
   List<Friend> friends = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadFriends(); // 追加: アプリ起動時に友達リストを読み込む
+  }
+
   void _addFriend() {
     showDialog(
       context: context,
@@ -63,6 +71,7 @@ class _FriendListPageState extends State<FriendListPage> {
               onPressed: () {
                 setState(() {
                   friends.add(Friend(name, university, faculty, year, email));
+                  _saveFriends(); //追加：友達を追加した後に保存
                 });
                 Navigator.of(context).pop();
               },
@@ -107,6 +116,7 @@ class _FriendListPageState extends State<FriendListPage> {
               onPressed: () {
                 setState(() {
                   friends[index] = Friend(name, university, faculty, year, email);
+                  _saveFriends(); //追加: 友達を編集した後に保存
                 });
                 Navigator.of(context).pop();
               },
@@ -127,6 +137,7 @@ class _FriendListPageState extends State<FriendListPage> {
   void _deleteFriend(int index) {
     setState(() {
       friends.removeAt(index);
+      _saveFriends(); //追加: 友達を削除した後に保存
     });
   }
 
@@ -139,6 +150,39 @@ class _FriendListPageState extends State<FriendListPage> {
       onChanged: onChanged,
       controller: TextEditingController(text: initialValue),
     );
+  }
+
+  // 追加: 友達リストを保存するメソッド
+  void _saveFriends() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> friendList = friends.map((friend) => json.encode({
+      'name': friend.name,
+      'university': friend.university,
+      'faculty': friend.faculty,
+      'year': friend.year,
+      'email': friend.email,
+    })).toList();
+    await prefs.setStringList('friendList', friendList);
+  }
+
+  // 追加: 友達リストを読み込むメソッド
+  void _loadFriends() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? friendList = prefs.getStringList('friendList');
+    if (friendList != null) {
+      setState(() {
+        friends = friendList.map((item) {
+          Map<String, dynamic> friendData = json.decode(item);
+          return Friend(
+            friendData['name'],
+            friendData['university'],
+            friendData['faculty'],
+            friendData['year'],
+            friendData['email'],
+          );
+        }).toList();
+      });
+    }
   }
 
   @override
