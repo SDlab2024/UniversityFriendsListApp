@@ -228,6 +228,7 @@ class _FriendListPageState extends State<FriendListPage> {
           return ListTile(
             title: Text(friends[index].name),
             onTap: () => _editFriend(index),
+            subtitle: Text("追加日: ${friends[index].addedDate.toLocal()}".split(' ')[0]), // 最終追加：追加日を表示
             trailing: IconButton(
               icon: Icon(Icons.delete),
               onPressed: () => _deleteFriend(index),
